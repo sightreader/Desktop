@@ -6,25 +6,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\managed-midi\Commons.Music.Midi.DotNetCore\Commons.Music.Midi.DotNetCore.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Reference Include="Config.Net">
-      <HintPath>..\..\Engine\Engine\bin\Release\netstandard2.1\Config.Net.dll</HintPath>
-    </Reference>
-    <Reference Include="Config.Net.Json">
-      <HintPath>..\..\Engine\Engine\bin\Release\netstandard2.1\Config.Net.Json.dll</HintPath>
-    </Reference>
-    <Reference Include="Engine">
-      <HintPath>..\..\Engine\Engine\bin\Release\netstandard2.1\Engine.dll</HintPath>
-    </Reference>
-    <Reference Include="Fleck">
-      <HintPath>..\..\Engine\Engine\bin\Release\netstandard2.1\Fleck.dll</HintPath>
-    </Reference>
-    <Reference Include="Websocket.Client">
-      <HintPath>..\..\Engine\Engine\bin\Release\netstandard2.1\Websocket.Client.dll</HintPath>
-    </Reference>
+    <ProjectReference Include="..\..\Engine\Engine\Engine.csproj" />
   </ItemGroup>
 
 </Project>

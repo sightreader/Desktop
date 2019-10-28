@@ -5,9 +5,7 @@ VisualStudioVersion = 16.0.29319.158
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Desktop", "Desktop\Desktop.csproj", "{5B4F3FC2-ABF1-4A44-A081-8101A374FF17}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Commons.Music.Midi.DotNetCore", "..\managed-midi\Commons.Music.Midi.DotNetCore\Commons.Music.Midi.DotNetCore.csproj", "{B5489065-2E07-4B95-AF2C-67D49473A53C}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "alsa-sharp", "..\managed-midi\external\alsa-sharp\dotnetcore\alsa-sharp\alsa-sharp.csproj", "{0040AA81-1873-45CE-AC3B-074002890E9B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Engine", "..\Engine\Engine\Engine.csproj", "{99C2D5C7-7788-48BF-B75D-5DDE9A39B7EA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -19,14 +17,10 @@ Global
 		{5B4F3FC2-ABF1-4A44-A081-8101A374FF17}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5B4F3FC2-ABF1-4A44-A081-8101A374FF17}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5B4F3FC2-ABF1-4A44-A081-8101A374FF17}.Release|Any CPU.Build.0 = Release|Any CPU
-		{B5489065-2E07-4B95-AF2C-67D49473A53C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{B5489065-2E07-4B95-AF2C-67D49473A53C}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{B5489065-2E07-4B95-AF2C-67D49473A53C}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{B5489065-2E07-4B95-AF2C-67D49473A53C}.Release|Any CPU.Build.0 = Release|Any CPU
-		{0040AA81-1873-45CE-AC3B-074002890E9B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{0040AA81-1873-45CE-AC3B-074002890E9B}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{0040AA81-1873-45CE-AC3B-074002890E9B}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{0040AA81-1873-45CE-AC3B-074002890E9B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{99C2D5C7-7788-48BF-B75D-5DDE9A39B7EA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{99C2D5C7-7788-48BF-B75D-5DDE9A39B7EA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{99C2D5C7-7788-48BF-B75D-5DDE9A39B7EA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{99C2D5C7-7788-48BF-B75D-5DDE9A39B7EA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
