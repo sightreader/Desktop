@@ -11,30 +11,10 @@ namespace Desktop
         {
             try
             {
-                var midiAccess = new Commons.Music.Midi.Alsa.AlsaMidiAccess();
-                Console.WriteLine("Using ALSA Midi Access.");
-                foreach (var input in midiAccess.Inputs)
-                {
-                    Console.WriteLine($"Input: {input.Id} - {input.Name}");
-                }
-                foreach (var output in midiAccess.Outputs)
-                {
-                    Console.WriteLine($"Output: {output.Id} - {output.Name}");
-                }
+                var engine = new DesktopEngine();
+                engine.Server.Run(engine);
 
-                IMidiPortDetails matchedInput = null;
-                do
-                {
-                    Console.Write("Select Input ID: ");
-                    var inputId = Console.ReadLine();
-                    matchedInput = midiAccess.Inputs.ToList().Find(x => x.Id.ToLower().Contains(inputId));
-                } while (matchedInput == null);
-
-                var openedInput = midiAccess.OpenInputAsync(matchedInput.Id).Result;
-
-                openedInput.MessageReceived += Input_MessageReceived;
-
-                Console.WriteLine("MIDI Input Opened. Press <ENTER> to close program.");
+                Console.Write("Press <ENTER> to exit the program...");
                 Console.ReadLine();
             }
             catch (Exception ex)
