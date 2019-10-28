@@ -9,6 +9,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Engine", "..\Engine\Engine\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "alsa-sharp", "..\managed-midi\external\alsa-sharp\dotnetcore\alsa-sharp\alsa-sharp.csproj", "{1B35B8B8-3944-4BCF-9BA0-33F6B66C5E5C}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Commons.Music.Midi.DotNetCore", "..\managed-midi\Commons.Music.Midi.DotNetCore\Commons.Music.Midi.DotNetCore.csproj", "{831B6DD0-4642-4FEB-A715-B4AF16740666}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Commons.Music.Midi", "..\managed-midi\Commons.Music.Midi\Commons.Music.Midi.csproj", "{D715D6DA-C9FE-4024-865E-F04A64B9984B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +31,14 @@ Global
 		{1B35B8B8-3944-4BCF-9BA0-33F6B66C5E5C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1B35B8B8-3944-4BCF-9BA0-33F6B66C5E5C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1B35B8B8-3944-4BCF-9BA0-33F6B66C5E5C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{831B6DD0-4642-4FEB-A715-B4AF16740666}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{831B6DD0-4642-4FEB-A715-B4AF16740666}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{831B6DD0-4642-4FEB-A715-B4AF16740666}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{831B6DD0-4642-4FEB-A715-B4AF16740666}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D715D6DA-C9FE-4024-865E-F04A64B9984B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D715D6DA-C9FE-4024-865E-F04A64B9984B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D715D6DA-C9FE-4024-865E-F04A64B9984B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D715D6DA-C9FE-4024-865E-F04A64B9984B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

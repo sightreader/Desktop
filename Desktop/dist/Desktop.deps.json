@@ -9,7 +9,9 @@
     ".NETCoreApp,Version=v3.0/linux-arm": {
       "Desktop/1.0.0": {
         "dependencies": {
+          "Commons.Music.Midi": "1.0.0",
           "Engine": "1.0.0",
+          "alsa-sharp": "1.0.0",
           "runtimepack.Microsoft.NETCore.App.Runtime.linux-arm": "3.0.0"
         },
         "runtime": {
@@ -794,18 +796,6 @@
           "lib/netcoreapp2.0/Fleck.dll": {
             "assemblyVersion": "1.1.0.0",
             "fileVersion": "1.1.0.0"
-          }
-        }
-      },
-      "managed-midi/1.9.12": {
-        "runtime": {
-          "lib/netcoreapp2.1/Commons.Music.Midi.dll": {
-            "assemblyVersion": "1.0.0.0",
-            "fileVersion": "1.0.0.0"
-          },
-          "lib/netcoreapp2.1/alsa-sharp.dll": {
-            "assemblyVersion": "1.0.0.0",
-            "fileVersion": "1.0.0.0"
           }
         }
       },
@@ -1927,8 +1917,22 @@
           }
         }
       },
+      "alsa-sharp/1.0.0": {
+        "runtime": {
+          "alsa-sharp.dll": {}
+        }
+      },
+      "Commons.Music.Midi/1.0.0": {
+        "dependencies": {
+          "alsa-sharp": "1.0.0"
+        },
+        "runtime": {
+          "Commons.Music.Midi.dll": {}
+        }
+      },
       "Engine/1.0.0": {
         "dependencies": {
+          "Commons.Music.Midi": "1.0.0",
           "Config.Net": "4.13.7",
           "Config.Net.Json": "4.13.7",
           "Fleck": "1.1.0",
@@ -1939,8 +1943,7 @@
           "Serilog.Sinks.File": "4.1.0",
           "System.ComponentModel.Annotations": "4.6.0",
           "System.Linq": "4.3.0",
-          "Websocket.Client": "3.2.56",
-          "managed-midi": "1.9.12"
+          "Websocket.Client": "3.2.56"
         },
         "runtime": {
           "Engine.dll": {}
@@ -1986,13 +1989,6 @@
       "sha512": "sha512-X33W1PqRciRmh8Q23klEv3CiRS681IUJj/Ldlgi96lSfq1Uaux3l1qNewRDboiUxnHfoNtcIhFMIhc9AJ4cw6g==",
       "path": "fleck/1.1.0",
       "hashPath": "fleck.1.1.0.nupkg.sha512"
-    },
-    "managed-midi/1.9.12": {
-      "type": "package",
-      "serviceable": true,
-      "sha512": "sha512-3jiZsIA5FFJE3Dot4qaGot0SmNu6o3a1b7sqovTFtOKDgf5L6uHbc2tcf9QTxofLB6mCXSwRrK5QGz0GX2FJIA==",
-      "path": "managed-midi/1.9.12",
-      "hashPath": "managed-midi.1.9.12.nupkg.sha512"
     },
     "MessagePack/1.8.74": {
       "type": "package",
@@ -2889,6 +2885,16 @@
       "sha512": "sha512-hqrUGvZ+4YJ3YLaE6P5Kxros58HH2k7NbIP9T+5W2CR1ca//bX+/Ae0BTJByBbbw1piKPID6j5+PgpS2MOgbMQ==",
       "path": "websocket.client/3.2.56",
       "hashPath": "websocket.client.3.2.56.nupkg.sha512"
+    },
+    "alsa-sharp/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "Commons.Music.Midi/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
     },
     "Engine/1.0.0": {
       "type": "project",

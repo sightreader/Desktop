@@ -6,21 +6,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="lib\librtmidi.dylib" />
-    <None Remove="lib\librtmidi.so" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Content Include="lib\librtmidi.dylib">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="lib\librtmidi.so">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\..\Engine\Engine\Engine.csproj" />
+    <ProjectReference Include="..\..\managed-midi\Commons.Music.Midi.DotNetCore\Commons.Music.Midi.DotNetCore.csproj" />
+    <ProjectReference Include="..\..\managed-midi\external\alsa-sharp\dotnetcore\alsa-sharp\alsa-sharp.csproj" />
   </ItemGroup>
 
 </Project>
