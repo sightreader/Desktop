@@ -24,10 +24,10 @@ namespace Desktop
                 IMidiPortDetails matchedInput = null;
                 do
                 {
-                    Console.Write("Select Input ID:");
+                    Console.Write("Select Input ID: ");
                     var inputId = Console.ReadLine();
                     matchedInput = midiAccess.Inputs.ToList().Find(x => x.Id.ToLower().Contains(inputId));
-                } while (matchedInput != null);
+                } while (matchedInput == null);
 
                 midiAccess.OpenInputAsync(matchedInput.Id).Wait();
             }
