@@ -9,8 +9,8 @@
     ".NETCoreApp,Version=v3.0/linux-arm": {
       "Desktop/1.0.0": {
         "dependencies": {
+          "Commons.Music.Midi": "1.0.0",
           "Engine": "1.0.0",
-          "managed-midi": "1.9.12",
           "runtimepack.Microsoft.NETCore.App.Runtime.linux-arm": "3.0.0"
         },
         "runtime": {

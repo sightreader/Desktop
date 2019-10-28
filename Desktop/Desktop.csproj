@@ -6,11 +6,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="managed-midi" Version="1.9.12" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\..\Engine\Engine\Engine.csproj" />
+    <ProjectReference Include="..\..\managed-midi\Commons.Music.Midi.DotNetCore\Commons.Music.Midi.DotNetCore.csproj" />
   </ItemGroup>
 
 </Project>
