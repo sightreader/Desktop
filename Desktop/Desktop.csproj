@@ -6,20 +6,21 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="lib\librtmidi.dylib" />
+    <None Remove="lib\librtmidi.so" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="lib\librtmidi.dylib">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="lib\librtmidi.so">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\..\Engine\Engine\Engine.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="lib\" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Update="lib\librtmidi.dylib">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="lib\librtmidi.so">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
   </ItemGroup>
 
 </Project>

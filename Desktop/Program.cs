@@ -10,8 +10,8 @@ namespace Desktop
         {
             try
             {
-                var midiAccess = new Commons.Music.Midi.RtMidi.RtMidiAccess();
-                Console.WriteLine("Using RtMidi.");
+                var midiAccess = new Commons.Music.Midi.Alsa.AlsaMidiAccess();
+                Console.WriteLine("Using ALSA Midi Access.");
                 foreach (var input in midiAccess.Inputs)
                 {
                     Console.WriteLine($"Input: {input.Id} - {input.Name}");
