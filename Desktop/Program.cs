@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Commons.Music.Midi;
+using System;
 
 namespace Desktop
 {
@@ -6,6 +7,17 @@ namespace Desktop
     {
         static void Main()
         {
+            var midiAccess = new Commons.Music.Midi.Alsa.AlsaMidiAccess();
+            foreach (var input in midiAccess.Inputs)
+            {
+                Console.WriteLine($"Input: {input.Name}");
+            }
+            foreach (var output in midiAccess.Outputs)
+            {
+                Console.WriteLine($"Output: {output.Name}");
+            }
+
+
             var engine = new DesktopEngine();
             engine.Server.Run(engine);
 
