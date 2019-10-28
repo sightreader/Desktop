@@ -16,6 +16,14 @@ namespace Desktop
             {
                 Console.WriteLine($"Output: {output.Name}");
             }
+            foreach (var input in midiAccess.Inputs)
+            {
+                if (input.Name.ToLower().Contains("pixel"))
+                {
+                    Console.WriteLine($"Attempting to open input: {input.Name}");
+                    midiAccess.OpenInputAsync(input.Id);
+                }
+            }
 
 
             var engine = new DesktopEngine();
