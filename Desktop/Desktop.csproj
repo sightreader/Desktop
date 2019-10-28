@@ -13,14 +13,4 @@
     <ProjectReference Include="..\..\Engine\Engine\Engine.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Assets\" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Update="Assets\00 - Makiko Hirohashi - Spirited Away - Itsumo Nando Demo.xml">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>
-
 </Project>
