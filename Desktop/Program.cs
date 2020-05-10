@@ -6,6 +6,8 @@ namespace Desktop
     {
         static void Main()
         {
+            Console.Title = "SightReader Piano Assistant";
+
             var engine = new DesktopEngine();
             engine.Server.Run(engine);
 
