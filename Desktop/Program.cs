@@ -32,6 +32,16 @@ namespace Desktop
         public string FilePath { get; set; }
     }
 
+    [Verb("passthru", HelpText = "Runs like a regular digital piano. All inputs are passed through without interpretation.")]
+    class PassThruOptions
+    {
+        [Option('i', "inputs", Required = true, HelpText = "The MIDI inputs to use. Each partial match which be added as an input.")]
+        public IEnumerable<string> MidiInputs { get; set; }
+
+        [Option('o', "outputs", Required = true, HelpText = "The MIDI output to use. Each partial match will be added as an output.")]
+        public IEnumerable<string> MidiOutputs { get; set; }
+    }
+
     class Program
     {
         static int RunDebug(DebugOptions options)
@@ -39,7 +49,7 @@ namespace Desktop
             var engine = new DesktopEngine();
 
             var midiAccess = MidiAccessManager.Default;
-            
+
             Console.WriteLine("MIDI Inputs");
             Console.WriteLine("-----------");
             foreach (var input in midiAccess.Inputs)
@@ -78,12 +88,17 @@ namespace Desktop
             }
 
             var midiAccess = MidiAccessManager.Default;
-            foreach (var input in options.MidiInputs) {
+            foreach (var input in options.MidiInputs)
+            {
                 var foundMidiInput = midiAccess.Inputs.Where(x => x.Name.ToLower().Contains(input)).FirstOrDefault();
 
                 if (foundMidiInput == null)
                 {
                     Console.Error.WriteLine($"Did not find any MIDI input partially matching '{input}'.");
+                }
+                else
+                {
+                    Console.WriteLine($"Using MIDI input '{foundMidiInput.Name}'.");
                 }
                 engine.MidiInputs.Add(midiAccess.OpenInputAsync(foundMidiInput.Id).Result);
             }
@@ -96,6 +111,10 @@ namespace Desktop
                 {
                     Console.Error.WriteLine($"Did not find any MIDI output partially matching '{output}'.");
                 }
+                else
+                {
+                    Console.WriteLine($"Using MIDI output '{foundMidiOutput.Name}'.");
+                }
                 engine.MidiOutputs.Add(midiAccess.OpenOutputAsync(foundMidiOutput.Id).Result);
             }
 
@@ -106,9 +125,10 @@ namespace Desktop
             try
             {
                 fileStream = new FileStream(scoreFilePath, FileMode.Open);
-            } catch (Exception ex)
+            }
+            catch (Exception ex)
             {
-                Console.Error.WriteLine($"Could not open sheet music file path {scoreFilePath}: {ex.ToString()}");
+                Console.Error.WriteLine($"Could not open sheet music file path {scoreFilePath}: {ex}");
             }
 
             if (fileStream == null)
@@ -123,14 +143,19 @@ namespace Desktop
             {
                 scoreBuilder = new ScoreBuilder(fileStream);
                 score = scoreBuilder.Build();
-            } catch (Exception ex)
+            }
+            catch (Exception ex)
             {
-                Console.Error.WriteLine($"Could not build sheet music score from file path {scoreFilePath}: {ex.ToString()}");
+                Console.Error.WriteLine($"Could not build sheet music score from file path {scoreFilePath}: {ex}");
             }
 
             if (scoreBuilder == null || score == null)
             {
                 return 3;
+            }
+            else
+            {
+                Console.WriteLine($"Successfully loaded sheet music at {scoreFilePath}.");
             }
 
             engine.Interpreter.SetScore(score, scoreFilePath);
@@ -152,11 +177,26 @@ namespace Desktop
                         {
                             var pitch = e.Data[1];
                             var velocity = e.Data[2];
-                            engine.Interpreter.Input(new NotePress()
+
+                            /** The Yamaha P-45 sends Note Off messages as Note On 
+                             * messages with zero velocity. */
+                            var isNoteOnActuallyNoteOff = velocity == 0;
+
+                            if (isNoteOnActuallyNoteOff)
                             {
-                                Pitch = pitch,
-                                Velocity = velocity
-                            });
+                                engine.Interpreter.Input(new NoteRelease()
+                                {
+                                    Pitch = pitch
+                                });
+                            }
+                            else
+                            {
+                                engine.Interpreter.Input(new NotePress()
+                                {
+                                    Pitch = pitch,
+                                    Velocity = velocity
+                                });
+                            }
                         }
                         break;
                     case MidiEvent.CC:
@@ -180,7 +220,6 @@ namespace Desktop
                     switch (e)
                     {
                         case PedalChange pedal:
-                            Console.WriteLine($"Pedal: {pedal.Pedal}");
                             output.Send(new byte[]
                             {
                                 MidiEvent.CC,
@@ -195,7 +234,6 @@ namespace Desktop
                             }, 0, 3, 0);
                             break;
                         case NoteRelease release:
-                            Console.WriteLine($"Release: {release.Pitch}");
                             output.Send(new byte[]
                             {
                                 MidiEvent.NoteOff,
@@ -205,7 +243,6 @@ namespace Desktop
                             break;
                         case NotePress press:
                             var measureNumbers = engine.Interpreter.GetMeasureNumbers();
-                            Console.WriteLine($"Press: {press.Pitch} {measureNumbers[0]}, {measureNumbers[1]}");
                             output.Send(new byte[]
                             {
                                 MidiEvent.NoteOn,
@@ -226,6 +263,72 @@ namespace Desktop
                 int.TryParse(seekToMeasureNumberInput, out var seekToMeasureNumber);
                 engine.Interpreter.SeekMeasure(seekToMeasureNumber);
             }
+        }
+
+        static int RunPassThru(PassThruOptions options)
+        {
+            var engine = new DesktopEngine();
+
+            var midiAccess = MidiAccessManager.Default;
+            foreach (var input in options.MidiInputs)
+            {
+                var foundMidiInput = midiAccess.Inputs.Where(x => x.Name.ToLower().Contains(input)).FirstOrDefault();
+
+                if (foundMidiInput == null)
+                {
+                    Console.Error.WriteLine($"Did not find any MIDI input partially matching '{input}'.");
+                }
+                engine.MidiInputs.Add(midiAccess.OpenInputAsync(foundMidiInput.Id).Result);
+            }
+
+            foreach (var output in options.MidiOutputs)
+            {
+                var foundMidiOutput = midiAccess.Outputs.Where(x => x.Name.ToLower().Contains(output)).FirstOrDefault();
+
+                if (foundMidiOutput == null)
+                {
+                    Console.Error.WriteLine($"Did not find any MIDI output partially matching '{output}'.");
+                }
+                engine.MidiOutputs.Add(midiAccess.OpenOutputAsync(foundMidiOutput.Id).Result);
+            }
+
+            engine.MidiInputs[0].MessageReceived += (object sender, MidiReceivedEventArgs e) =>
+            {
+                foreach (var output in engine.MidiOutputs)
+                {
+                    switch (e.Data[0])
+                    {
+                        case MidiEvent.CC:
+                            output.Send(new byte[]
+                            {
+                                MidiEvent.CC,
+                                e.Data[1],
+                                e.Data[2]
+                            }, 0, 3, 0);
+                            break;
+                        case MidiEvent.NoteOff:
+                            output.Send(new byte[]
+                            {
+                                MidiEvent.NoteOff,
+                                e.Data[1],
+                                64 /* Default release velocity */
+                            }, 0, 3, 0);
+                            break;
+                        case MidiEvent.NoteOn:
+                            output.Send(new byte[]
+                            {
+                                MidiEvent.NoteOn,
+                                e.Data[1],
+                                e.Data[2]
+                            }, 0, 3, 0);
+                            break;
+                    }
+                }
+            };
+
+            Console.WriteLine();
+            Console.ReadLine();
+            Console.WriteLine("Digital piano pass-thru mode is now active. Press <ENTER> to quit the program at any time.");
 
             return 0;
         }
