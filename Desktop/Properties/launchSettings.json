@@ -2,7 +2,7 @@
   "profiles": {
     "Desktop": {
       "commandName": "Project",
-      "commandLineArgs": "debug"
+      "commandLineArgs": "play-direct --inputs Piano --outputs Loop"
     }
   }
 }

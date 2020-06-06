@@ -6,6 +6,7 @@ using Commons.Music.Midi;
 using SightReader.Engine.Interpreter;
 using SightReader.Engine.ScoreBuilder;
 using CommandLine;
+using System.Text;
 
 namespace Desktop
 {
@@ -28,7 +29,7 @@ namespace Desktop
         [Option('o', "outputs", Required = true, HelpText = "The MIDI output to use. Each partial match will be added as an output.")]
         public IEnumerable<string> MidiOutputs { get; set; }
 
-        [Option('f', "file", Required = true, HelpText = "Path to MusicXML sheet music for direct mode.")]
+        [Option('f', "file", Required = false, HelpText = "Path to MusicXML sheet music for direct mode.")]
         public string FilePath { get; set; }
     }
 
@@ -81,22 +82,15 @@ namespace Desktop
         {
             var engine = new DesktopEngine();
 
-            if (!File.Exists(options.FilePath))
-            {
-                Console.Error.WriteLine($"Could not find sheet music file '{options.FilePath}'.");
-                return 1;
-            }
-
             var midiAccess = MidiAccessManager.Default;
-            foreach (var input in options.MidiInputs)
-            {
-                var foundMidiInput = midiAccess.Inputs.Where(x => x.Name.ToLower().Contains(input)).FirstOrDefault();
+            foreach (var input in options.MidiInputs) {
+                var foundMidiInput = midiAccess.Inputs.Where(x => x.Name.ToLower().Contains(input.ToLower())).FirstOrDefault();
 
                 if (foundMidiInput == null)
                 {
                     Console.Error.WriteLine($"Did not find any MIDI input partially matching '{input}'.");
-                }
-                else
+                    return 1;
+                } else
                 {
                     Console.WriteLine($"Using MIDI input '{foundMidiInput.Name}'.");
                 }
@@ -105,15 +99,16 @@ namespace Desktop
 
             foreach (var output in options.MidiOutputs)
             {
-                var foundMidiOutput = midiAccess.Outputs.Where(x => x.Name.ToLower().Contains(output)).FirstOrDefault();
+                var foundMidiOutput = midiAccess.Outputs.Where(x => x.Name.ToLower().Contains(output.ToLower())).FirstOrDefault();
 
                 if (foundMidiOutput == null)
                 {
                     Console.Error.WriteLine($"Did not find any MIDI output partially matching '{output}'.");
+                    return 1;
                 }
                 else
                 {
-                    Console.WriteLine($"Using MIDI output '{foundMidiOutput.Name}'.");
+                    Console.WriteLine($"Using MIDI output'{foundMidiOutput.Name}'.");
                 }
                 engine.MidiOutputs.Add(midiAccess.OpenOutputAsync(foundMidiOutput.Id).Result);
             }
@@ -122,43 +117,53 @@ namespace Desktop
 
             FileStream fileStream = null;
 
-            try
-            {
-                fileStream = new FileStream(scoreFilePath, FileMode.Open);
-            }
-            catch (Exception ex)
-            {
-                Console.Error.WriteLine($"Could not open sheet music file path {scoreFilePath}: {ex}");
-            }
-
-            if (fileStream == null)
-            {
-                return 2;
-            }
-
             ScoreBuilder scoreBuilder = null;
             Score score = null;
 
-            try
+            if (scoreFilePath != null)
             {
-                scoreBuilder = new ScoreBuilder(fileStream);
-                score = scoreBuilder.Build();
-            }
-            catch (Exception ex)
-            {
-                Console.Error.WriteLine($"Could not build sheet music score from file path {scoreFilePath}: {ex}");
-            }
 
-            if (scoreBuilder == null || score == null)
-            {
-                return 3;
-            }
-            else
-            {
-                Console.WriteLine($"Successfully loaded sheet music at {scoreFilePath}.");
-            }
+                if (!File.Exists(options.FilePath))
+                {
+                    Console.Error.WriteLine($"Could not find sheet music file '{options.FilePath}'.");
+                    return 1;
+                }
 
-            engine.Interpreter.SetScore(score, scoreFilePath);
+                try
+                {
+                    fileStream = new FileStream(scoreFilePath, FileMode.Open);
+                }
+                catch (Exception ex)
+                {
+                    Console.Error.WriteLine($"Could not open sheet music file path {scoreFilePath}: {ex}");
+                }
+
+                if (fileStream == null)
+                {
+                    return 2;
+                }
+
+                try
+                {
+                    scoreBuilder = new ScoreBuilder(fileStream);
+                    score = scoreBuilder.Build();
+                }
+                catch (Exception ex)
+                {
+                    Console.Error.WriteLine($"Could not build sheet music score from file path {scoreFilePath}: {ex}");
+                }
+
+                if (scoreBuilder == null || score == null)
+                {
+                    return 3;
+                }
+                else
+                {
+                    Console.WriteLine($"Successfully loaded sheet music at {scoreFilePath}.");
+                }
+
+                engine.Interpreter.SetScore(score, scoreFilePath);
+            }
 
             engine.MidiInputs[0].MessageReceived += (object sender, MidiReceivedEventArgs e) =>
             {
@@ -258,10 +263,61 @@ namespace Desktop
 
             while (true)
             {
-                Console.Write("Jump to Measure Number: ");
+                Console.Write("Jump to Measure Number (or load sheet music): ");
                 var seekToMeasureNumberInput = Console.ReadLine();
-                int.TryParse(seekToMeasureNumberInput, out var seekToMeasureNumber);
-                engine.Interpreter.SeekMeasure(seekToMeasureNumber);
+                if (int.TryParse(seekToMeasureNumberInput, out var seekToMeasureNumber))
+                {
+                    engine.Interpreter.SeekMeasure(seekToMeasureNumber);
+                } else
+                {
+                    scoreFilePath = seekToMeasureNumberInput.Replace('"', ' ').Trim();
+
+
+                    if (!File.Exists(scoreFilePath))
+                    {
+                        Console.Error.WriteLine($"Could not find sheet music file '{scoreFilePath}'.");
+                        return 1;
+                    }
+
+                    try
+                    {
+                        fileStream = new FileStream(scoreFilePath, FileMode.Open);
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.Error.WriteLine($"Could not open sheet music file path {scoreFilePath}: {ex}");
+                    }
+
+                    if (fileStream == null)
+                    {
+                        return 2;
+                    }
+
+                    scoreBuilder = null;
+                    score = null;
+
+                    try
+                    {
+                        scoreBuilder = new ScoreBuilder(fileStream);
+                        score = scoreBuilder.Build();
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.Error.WriteLine($"Could not build sheet music score from file path {scoreFilePath}: {ex}");
+                    }
+
+                    if (scoreBuilder == null || score == null)
+                    {
+                        return 3;
+                    }
+                    else
+                    {
+                        Console.WriteLine($"Successfully loaded sheet music at {scoreFilePath}.");
+
+                        engine.Interpreter.SetScore(score, scoreFilePath);
+
+                    }
+                }
             }
         }
 
@@ -348,6 +404,10 @@ namespace Desktop
                 (PlayOptions o) => RunPlay(o),
                 (PlayDirectOptions o) => RunPlayDirect(o),
                 errors => OnConsoleArgsParseError(errors));
+
+            Console.ReadLine();
+            Console.WriteLine();
+            Console.WriteLine("Press <ENTER> to exit the program.");    
         }
     }
 }
