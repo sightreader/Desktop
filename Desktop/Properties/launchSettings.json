@@ -2,7 +2,7 @@
   "profiles": {
     "Desktop": {
       "commandName": "Project",
-      "commandLineArgs": "play-direct --inputs Piano --outputs Loop"
+      "commandLineArgs": "passthru --inputs Piano USB --outputs Loop"
     }
   }
 }
