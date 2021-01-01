@@ -2,7 +2,7 @@
   "profiles": {
     "Desktop": {
       "commandName": "Project",
-      "commandLineArgs": "debug"
+      "commandLineArgs": "passthru --inputs Piano USB --outputs Loop"
     }
   }
 }
